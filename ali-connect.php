@@ -1585,9 +1585,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                     
                     $ch = curl_init("https://api2.asiacommerce.net/api/v2/country?filter[name][like]=$kota_toko");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                        'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                         'Content-Type: application/json')
                     );
                     $result = curl_exec($ch);
@@ -1597,9 +1598,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                     
                     $ch = curl_init("https://api2.asiacommerce.net/api/v2/provinces?filter[country_id][is]=$id_country&page[limit]=100");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                        'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                         'Content-Type: application/json')
                     );
                     
@@ -1619,13 +1621,14 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                     // city
                     $ch = curl_init("https://api2.asiacommerce.net/api/v2/cities?page[limit]=10000&filter[country_id][is]=$id_country");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);            
                     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                     // curl_setopt($ch, CURLOPT_GET, true);
                     // curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     
                     // Set HTTP Header for POST request 
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                        'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                         'Content-Type: application/json'
                     /*'Content-Length: ' . strlen($payload)*/)
                     );
@@ -1782,9 +1785,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                     $url_endpoint = urlencode($origin_city);
                                     $ch = curl_init("https://api2.asiacommerce.net/api/v2/cities?page[limit]=25&filter[name][like]=$url_endpoint");
                                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                        'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                         'Content-Type: application/json')
                                     );
                                     $result = curl_exec($ch);
@@ -1795,10 +1799,11 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                     $url_endpoint = urlencode($destination_city);
                                     $ch = curl_init("https://api2.asiacommerce.net/api/v2/cities?page[limit]=25&filter[name][is]=$url_endpoint");
                                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                     curl_setopt($ch, CURLOPT_HTTPHEADER, 
                                     array(
-                                      'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                       'Content-Type: application/json')
                                     );
                                     $result = curl_exec($ch);
@@ -1811,9 +1816,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                         
                                         $ch = curl_init("https://api2.asiacommerce.net/api/v2/logistic-rates?page[limit]=10&filter[origin_id][in]=$id_origin_city,&filter[destination_id][in]=$id_destination_city&include=courier");
                                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                         curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                            'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                             'Content-Type: application/json')
                                         );
                                         $result = curl_exec($ch);
@@ -1894,9 +1900,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                 $url_endpoint = urlencode($origin_city);
                                 $ch = curl_init("https://api2.asiacommerce.net/api/v2/cities?page[limit]=25&filter[name][like]=$url_endpoint");
                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                 curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                    'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                     'Content-Type: application/json')
                                 );
                                 $result = curl_exec($ch);
@@ -1907,9 +1914,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                 $url_endpoint = urlencode($destination_city);
                                 $ch = curl_init("https://api2.asiacommerce.net/api/v2/cities?page[limit]=25&filter[name][is]=$url_endpoint");
                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                 curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                 curl_setopt($ch, CURLOPT_HTTPHEADER,array(
-                                    'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                     'Content-Type: application/json')
                                 );
                                 $result = curl_exec($ch);
@@ -1919,9 +1927,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                 
                                 $ch = curl_init("https://api2.asiacommerce.net/api/v2/logistic-rates?page[limit]=10&filter[origin_id][in]=$id_origin_city,&filter[destination_id][in]=$id_destination_city&include=courier");
                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                 curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                    'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                     'Content-Type: application/json')
                                 );
                                 $result = curl_exec($ch);
@@ -2002,9 +2011,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                     $ori_country_prod = urlencode($ori_country_prod);
                                     $ch = curl_init("https://api2.asiacommerce.net/api/v2/country?page[num]=1&page[limit]=25&sort=name&filter[name][like]=$ori_country_prod");
                                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                        'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                         'Content-Type: application/json')
                                     );
                                     $result = curl_exec($ch);
@@ -2019,9 +2029,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                         $destination_country = urlencode($destination_country);
                                         $ch = curl_init("https://api2.asiacommerce.net/api/v2/country?page[num]=1&page[limit]=25&sort=name&filter[name][like]=$destination_country");
                                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                         curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                            'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                             'Content-Type: application/json')
                                         );
                                         $result = curl_exec($ch);
@@ -2036,9 +2047,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                             
                                             $ch = curl_init("https://api2.asiacommerce.net/api/v2/country-hub/$origin_country_id/to/$dest_country_id");
                                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                             curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                                'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                                 'Content-Type: application/json')
                                             );
                                             $result = curl_exec($ch);
@@ -2053,9 +2065,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                             if($arr_res['default_shipment_method']=='air_courier'){
                                                 $ch = curl_init("https://api2.asiacommerce.net/api/v2/logistic-rates?page[num]=1&page[limit]=100&filter[origin_country_id][is]=$origin_country_id&filter[destination_country_id][is]=$dest_country_id&sort=-rate_per_weight&diverse=International&include=country,courier,destinationCountry");
                                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                                 curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                                 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                                    'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                                     'Content-Type: application/json')
                                                 );
                                                 $result = curl_exec($ch);
@@ -2119,9 +2132,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                                                 $currency_ret = $currency_rate[$k1][$k2];
                                                                 $ch = curl_init("https://api2.asiacommerce.net/api/v2/currencies?page[num]=1&page[limit]=10&sort=-id&filter[currency_code][like]=$currency_ret&filter[currency_code_target][like]=$market_currency");
                                                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                                                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                                                 curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                                                 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                                                    'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                                                     'Content-Type: application/json')
                                                                 );
                                                                 $result = curl_exec($ch);
@@ -2179,9 +2193,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                     $url_endpoint = urlencode($origin_city);
                                     $ch = curl_init("https://api2.asiacommerce.net/api/v2/cities?page[limit]=25&filter[name][like]=$url_endpoint");
                                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                        'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                         'Content-Type: application/json')
                                     );
                                     $result = curl_exec($ch);
@@ -2192,10 +2207,11 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                     $url_endpoint = urlencode($destination_city);
                                     $ch = curl_init("https://api2.asiacommerce.net/api/v2/cities?page[limit]=25&filter[name][is]=$url_endpoint");
                                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                     curl_setopt($ch, CURLOPT_HTTPHEADER, 
                                     array(
-                                        'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                         'Content-Type: application/json')
                                     );
                                     $result = curl_exec($ch);
@@ -2207,9 +2223,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                           
                                     $ch = curl_init("https://api2.asiacommerce.net/api/v2/logistic-rates?page[limit]=10&filter[origin_id][in]=$id_origin_city,&filter[destination_id][in]=$id_destination_city&include=courier");
                                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                        'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                         'Content-Type: application/json')
                                     );
                                     $result = curl_exec($ch);
@@ -2293,9 +2310,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                     $ori_country_prod = urlencode($country_store);
                                     $ch = curl_init("https://api2.asiacommerce.net/api/v2/country?page[num]=1&page[limit]=25&sort=name&filter[name][like]=$ori_country_prod");
                                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                        'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                         'Content-Type: application/json')
                                     );
                                     $result = curl_exec($ch);
@@ -2310,9 +2328,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                         $destination_country = urlencode($destination_country);
                                         $ch = curl_init("https://api2.asiacommerce.net/api/v2/country?page[num]=1&page[limit]=25&sort=name&filter[name][like]=$destination_country");
                                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                         curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                            'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                             'Content-Type: application/json')
                                         );
                                         $result = curl_exec($ch);
@@ -2327,9 +2346,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                             
                                             $ch = curl_init("https://api2.asiacommerce.net/api/v2/country-hub/$origin_country_id/to/$dest_country_id");
                                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                             curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                             curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                                'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                                 'Content-Type: application/json')
                                             );
                                             $result = curl_exec($ch);
@@ -2345,9 +2365,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                         
                                                 $ch = curl_init("https://api2.asiacommerce.net/api/v2/logistic-rates?page[num]=1&page[limit]=100&filter[origin_country_id][is]=$origin_country_id&filter[destination_country_id][is]=$dest_country_id&sort=-rate_per_weight&diverse=International&include=country,courier,destinationCountry");
                                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                                 curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                                 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                                    'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                                     'Content-Type: application/json')
                                                 );
                                                 $result = curl_exec($ch);
@@ -2417,9 +2438,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                                                 $currency_ret = $currency_rate[$k1][$k2];
                                                                 $ch = curl_init("https://api2.asiacommerce.net/api/v2/currencies?page[num]=1&page[limit]=10&sort=-id&filter[currency_code][like]=$currency_ret&filter[currency_code_target][like]=$market_currency");
                                                                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                                                curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+                                                                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
                                                                 curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                                                                 curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                                                    'Authorization:Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjRjNzMxNmE4OGZhYzBmNjE1ZTBlOWQ5ZTZlYjc4YzY4OTBmNDRjZjJiNGY2MjIzNzE4YjI5ODVlMzNlNmU2ZDU0M2VkOTRiNGNhYjBhOTEzIn0.eyJhdWQiOiIyIiwianRpIjoiNGM3MzE2YTg4ZmFjMGY2MTVlMGU5ZDllNmViNzhjNjg5MGY0NGNmMmI0ZjYyMjM3MThiMjk4NWUzM2U2ZTZkNTQzZWQ5NGI0Y2FiMGE5MTMiLCJpYXQiOjE2MTQzMzA3MzYsIm5iZiI6MTYxNDMzMDczNiwiZXhwIjoxNjQ1ODY2NzM2LCJzdWIiOiIyNzciLCJzY29wZXMiOltdfQ.A9PxemJX-k3fWDko1o4yHiAQLt3X9OOrVhTDU8CTAd9LdwBUo9CJVaSvB_x5qnXtUZ_QyByUpz2Qq6HwL4io9uzijXIzPOLOdJHXl9i42gB1k1mKql7gktBoqXH6Zd6i_OirSfBKFOIe8rmxOgdXGNdOEgDcYMKGFjG5PoSmKPbpS1JPJyqbKF1zAc4KNAb5TwmoqfYxbj-HR0IEN_MP2rRMooYfKJvMie6egtxbw2hLvXJC1hDfNdAvHjgqW9te1BAhblDQkZ2H4hz9JuVI_KK-hMAxhQiFhdrMl3tjqEL2P6h3hm1G2JVvJBHR6wmosigH6GjhhNraEwNME9DYo5R0v-EtAqNdFO4NOJg3oLqOEgaeX36C9otoQQhjzxvzAw9YdxcaRBEMU5O6I1iLbxoB3sf_T6J-VvldPzDMB1F62VavSz7Ml-hkNXB6L3At5TBlmxUjS_KdqYxJAEsGFLwvbcZzMncFmjkSGyBfNLBrWm57pVmhxzXXAEx4YLafTILwFAzsgplHZ8n7ZbZ8PRoKAPA61_RXuB2gzKaFRGEwA0ir2UsbSkB2RaLXaRSss6teWmkPNd6CO4RrkJma6-ZcpiDuhrFq34EwXsC8zU_NxVxPYnivFHIODruYefR_oXq54Y8oSXv1sMNwoiraZwn6nw63i_zZgQwpBP0YUOU',
                                                                     'Content-Type: application/json')
                                                                 );
                                                                 $result = curl_exec($ch);
