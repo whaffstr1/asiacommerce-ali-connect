@@ -6,3 +6,6 @@ contain several of features. such as
 ~ Add custom information on product page
 ~ Multiple Shipping Origin Supported
 ~ Ensure that the goods when add to cart is from the same country
+
+Update
+- Fix public api used for calculate shipping
