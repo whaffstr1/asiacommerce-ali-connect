@@ -25,7 +25,6 @@ Author URI: https://asiacommerce.net/
 */
 
 
-
 require_once 'checker.php';
 
 require_once 'fibu-helper.php';
@@ -44,7 +43,7 @@ class Ali_Connect_Wordpress
 
     protected $fibu;
 
-    protected static $version = '2.1';
+    protected static $version = '2.2';
 
 
 
