@@ -17,9 +17,6 @@ class ALI_Connect_Checker
             return true;
         }
 
-        // $debug = get_post_meta($id, 'ali__is_ali_product', true);
-        // echo $debug;
-
         return get_post_meta($id, 'ali__is_ali_product', true);
     }
 

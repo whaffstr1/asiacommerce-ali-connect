@@ -45,11 +45,7 @@ class Ali_Connect_Wordpress
 
     protected static $version = '2.2';
 
-
-
-    public function __construct()
-
-    {
+    public function __construct(){
 
         $this->checker = new ALI_Connect_Checker();
 
@@ -59,9 +55,7 @@ class Ali_Connect_Wordpress
 
 
 
-    public static function install()
-
-    {
+    public static function install(){
 
         add_option('ali_connect_version', static::$version);
 
@@ -69,20 +63,13 @@ class Ali_Connect_Wordpress
 
 
 
-    public function return_personalised_catalog_data_to_api($product, $post, $request)
-
-    {
+    public function return_personalised_catalog_data_to_api($product, $post, $request){
 
         $product_id = $product->data['id'];
 
         $customer_id = $request['customer_id'];
 
-
-
         // Get customer-specific price from database table
-
-
-
         return $product;
 
     }
@@ -116,11 +103,12 @@ class Ali_Connect_Wordpress
             $this->checker->init();
 
             add_action('woocommerce_check_cart_items', array($this,'restrictProduct'), 10);
+
             add_filter( 'woocommerce_cart_item_name', array($this,'identifyProduct'), 10, 3);
+
             add_action( 'woocommerce_proceed_to_checkout', array($this,'disable_checkout_button_no_shipping'), 10);
-            
-            //add_action('rest_api_init',array($this,'register_routes_api'),10);
-             add_action('rest_api_init', array($this,'deleteImagesApi'), 10);
+
+            add_action('rest_api_init', array($this,'deleteImagesApi'), 10);
             
         } else {
 
@@ -131,245 +119,163 @@ class Ali_Connect_Wordpress
     }
 
     public function wc_uom_render_output( $price ) {
-    global $post;
-    // Check if uom text exists.
-    $woo_uom_output = get_post_meta( $post->ID, '_uom', true );
-    $woo_uom_output2 = strtoupper(get_post_meta( $post->ID, '_uom_base', true ));
-    $woo_uom_output3 = get_post_meta( $post->ID, '_uom_base_qty', true );
-    
-    if( !empty($woo_uom_output) && strtolower($woo_uom_output)!=strtolower($woo_uom_output2)){
-      $price = $price . ' <span class="uom">' . ' / ' .esc_attr( strtoupper($woo_uom_output), 'woocommerce-uom' ) . "(@$woo_uom_output3 $woo_uom_output2)" . '</span>';
-      return $price;
+        global $post;
+        // Check if uom text exists.
+        $woo_uom_output = get_post_meta( $post->ID, '_uom', true );
+        $woo_uom_output2 = strtoupper(get_post_meta( $post->ID, '_uom_base', true ));
+        $woo_uom_output3 = get_post_meta( $post->ID, '_uom_base_qty', true );
+        
+        if( !empty($woo_uom_output) && strtolower($woo_uom_output)!=strtolower($woo_uom_output2)){
+        $price = $price . ' <span class="uom">' . ' / ' .esc_attr( strtoupper($woo_uom_output), 'woocommerce-uom' ) . "(@$woo_uom_output3 $woo_uom_output2)" . '</span>';
+            return $price;
+        }
+        else if( !empty($woo_uom_output) && strtolower($woo_uom_output)==strtolower($woo_uom_output2)){
+            $price = $price . ' <span class="uom">' . ' / ' .esc_attr( strtoupper($woo_uom_output), 'woocommerce-uom' )  . '</span>';
+            return $price;
+        }
+        else{
+            return $price;
+        }
     }
-    else if( !empty($woo_uom_output) && strtolower($woo_uom_output)==strtolower($woo_uom_output2)){
-      $price = $price . ' <span class="uom">' . ' / ' .esc_attr( strtoupper($woo_uom_output), 'woocommerce-uom' )  . '</span>';
-      return $price;
-    }
-    else{
-      return $price;
-    }
-    // Check if variable OR UOM text exists.
-    
-    // $base_uom = array('pcs','sheets','box');
-
-    // if( !in_array(strtolower($woo_uom_output), $base_uom) && !empty($woo_uom_output)){}
-    // if ( (strtolower($woo_uom_output)!='pcs' && strtolower($woo_uom_output)!='sheets' && strtolower($woo_uom_output)!='box') && !empty($woo_uom_output))
-    // {
-    //   $price = $price . ' <span class="uom">' . ' / ' .esc_attr( strtoupper($woo_uom_output), 'woocommerce-uom' ) . "(@$woo_uom_output3 $woo_uom_output2)" . '</span>';
-    //   return $price;
-    // }
-    // else if(!empty($woo_uom_output) || $woo_uom_output!=''){
-    //   $price = $price . ' <span class="uom">' . ' / ' .esc_attr( strtoupper($woo_uom_output), 'woocommerce-uom' )  . '</span>';
-    //   return $price;
-    // }
-    // else
-    //   return $price;
-  }
 
     public function custom_empty_cart( $passed, $product_id, $quantity ) {
+        $data_curr_prod = $_POST;
+        $variation_idi = '';
 
-      // if(get_current_user_id()==1)
-      // var_dump($_POST)
-      $data_curr_prod = $_POST;
-      $variation_idi = '';
-      // if(get_current_blog_id()==2421){
-      //   echo json_encode($_POST,true)."<br>";
-      //   echo $passed."<br>";
-      //   echo $product_id."<br>";
-      //   echo $quantity."<br>";
         if(!empty($data_curr_prod['variation_id'])){
-          $variation_idi = $data_curr_prod['variation_id'];
-          $perma_link = get_permalink($variation_idi);
+            $variation_idi = $data_curr_prod['variation_id'];
+            $perma_link = get_permalink($variation_idi);
         }
         else{
-          $perma_link = get_permalink($product_id);
+            $perma_link = get_permalink($product_id);
         }
-        // echo get_permalink($product_id)."<br>";
-        // echo get_permalink($variation_idi)."<br>";
-        // $variation = new WC_Product_Variation($variation_idi);
-        // $nama_prod = $variation->get_name();
-        // $variationName = implode(" / ", $variation->get_variation_attributes());
 
-        // echo $nama_prod." - ".$variationName;
-
-        
-      // }
-
-      
-
-      
-  
-      $product_id_current = ''; 
-      foreach( WC()->cart->get_cart() as $cart_item ){
-        
-        $product_id_current = $cart_item['product_id'];
-
-      }
-
-      if($product_id_current!=''){
-
-        $ali_prod = get_post_meta($product_id_current,'ali__is_ali_product',true);
-        $ali_prod2 = get_post_meta($product_id,'ali__is_ali_product',true);
-
-        $kota_code = wc_get_base_location();
-        $kota_code = $kota_code['country'];
-        $kota_toko = WC()->countries->countries["$kota_code"];
-
-        if($ali_prod!=$ali_prod2){         
-          // wc_add_notice( __( 'Barang ini adalah barang dropship / ready stok dan berbeda dengan barang di cart. Klik Kosongkan cart untuk mengganti barang yang ada di cart dengan barang ini.', 'woocommerce' ), 'error' );
-          
-          if(metadata_exists( 'post', $product_id_current, 'country' )){
-              $country_prod1 = get_post_meta($product_id_current,'country',true);
-          }else{
-              $kota_code = wc_get_base_location();
-              $kota_code = $kota_code['country'];
-              $kota_toko = WC()->countries->countries["$kota_code"];
-              $country_prod1 = $kota_toko;
-          }
-          
-          if(metadata_exists( 'post', $product_id, 'country' )){
-              $country_prod2 = get_post_meta($product_id,'country',true);
-          }else{
-              $kota_code = wc_get_base_location();
-              $kota_code = $kota_code['country'];
-              $kota_toko = WC()->countries->countries["$kota_code"];
-              $country_prod2 = $kota_toko;
-          }
-          
-          if($country_prod1!=$country_prod2){
-              wc_add_notice( __( "Barang ini berasal dari negara yang berbeda dengan barang di cart. Klik (Ya, Ganti Cart Saya) untuk mengganti barang yang ada di cart dengan barang ini.", 'woocommerce' ), 'error' );
-
-              wp_register_script( "empty-cart-ali", plugin_dir_url(__FILE__).'/js/atca.js', array('jquery') );
-
-              wp_localize_script( 'empty-cart-ali', 'myAjax', array( 
-                'ajaxurl'     => admin_url( 'admin-ajax.php'),
-                'vari_id'     => $variation_idi,
-                'qty'         => $quantity,
-                'prod_id'     => $product_id,
-                'perma_link'  => $perma_link
-              ));
-
-              wp_enqueue_script( 'jquery' );
-              wp_enqueue_script( 'empty-cart-ali' );
-
-              return false;              
-          }else{
-              return $passed;
-          }
-          
-        //   wc_add_notice( __( 'Barang ini dikirim dari gudang yang berbeda dengan barang di cart. Klik Kosongkan cart untuk mengganti barang yang ada di cart dengan barang ini.', 'woocommerce' ), 'error' );
-         
-        //   wp_register_script( "empty-cart-ali", plugin_dir_url(__FILE__).'/js/atca.js', array('jquery') );
-
-        //   wp_localize_script( 'empty-cart-ali', 'myAjax', array( 
-        //     'ajaxurl'    => admin_url( 'admin-ajax.php'),
-        //     'vari_id'    => $variation_idi,
-        //     'qty'        => $quantity,
-        //     'prod_id'    => $product_id,
-        //     'perma_link' => $perma_link
-        //   ));
-
-        //   wp_enqueue_script( 'jquery' );
-        //   wp_enqueue_script( 'empty-cart-ali' );
-
-        //   return false;
-          // if($ali_prod==0||$ali_prod==''&&$ali_prod2==1){
-          //   $country_prod2 = get_post_meta($product_id,'country',true);
-          //   if($kota_toko==$country_prod2){
-          //     return $passed;
-          //   }
-          //   else{
-          //     wc_add_notice( __( 'Barang ini adalah barang dropship / ready stok dan berbeda dengan barang di cart. Harap kosongkan cart terlebih dahulu, lalu add barang ini ke cart.', 'woocommerce' ), 'error' );
-          //     return false;
-          //   }
-          // }
-          // else if($ali_prod2==0||$ali_prod2==''&&$ali_prod==1){
-          //   $country_prod = get_post_meta($product_id_current,'country',true);
-
-          //   if($kota_toko==$country_prod){
-          //     return $passed;
-          //   }
-          //   else{
-          //     wc_add_notice( __( 'Barang ini adalah barang dropship / ready stok dan berbeda dengan barang di cart. Harap kosongkan cart terlebih dahulu, lalu add barang ini ke cart.', 'woocommerce' ), 'error' );
-          //     return false;
-          //   }
-          // }         
+        $product_id_current = ''; 
+        foreach( WC()->cart->get_cart() as $cart_item ){
+            $product_id_current = $cart_item['product_id'];
         }
-        else{
-          if($ali_prod==1){
-            $country_prod = get_post_meta($product_id_current,'country',true);
-            $country_prod2 = get_post_meta($product_id,'country',true);
-            if($country_prod!=$country_prod2){
-              wc_add_notice( __( "Barang ini berasal dari negara $country_prod2 dan berbeda dengan barang di cart. Klik (Ya, Ganti Cart Saya) untuk mengganti barang yang ada di cart dengan barang ini.", 'woocommerce' ), 'error' );
 
-              wp_register_script( "empty-cart-ali", plugin_dir_url(__FILE__).'/js/atca.js', array('jquery') );
+        if($product_id_current!=''){
 
-              wp_localize_script( 'empty-cart-ali', 'myAjax', array( 
-                'ajaxurl'     => admin_url( 'admin-ajax.php'),
-                'vari_id'     => $variation_idi,
-                'qty'         => $quantity,
-                'prod_id'     => $product_id,
-                'perma_link'  => $perma_link
-              ));
+            $ali_prod = get_post_meta($product_id_current,'ali__is_ali_product',true);
+            $ali_prod2 = get_post_meta($product_id,'ali__is_ali_product',true);
 
-              wp_enqueue_script( 'jquery' );
-              wp_enqueue_script( 'empty-cart-ali' );
+            $kota_code = wc_get_base_location();
+            $kota_code = $kota_code['country'];
+            $kota_toko = WC()->countries->countries["$kota_code"];
 
-              return false;              
-            }else{
-              if($country_prod==$kota_toko){
-                $city_prod = get_post_meta($product_id_current,'origin_city',true);
-                if(!$city_prod){
-            		$city_prod = get_post_meta($product_id_current,'city',true);
-            	}
-                $city_prod2 = get_post_meta($product_id,'origin_city',true);
-                if(!$city_prod2){
-            		$city_prod2 = get_post_meta($product_id,'city',true);
-            	}
-
-                $supplier_prod = get_post_meta($product_id_current,'supplier_name',true);
-                if(!$supplier_prod){
-                	$supplier_prod = get_post_meta($product_id_current,'warehouse_name',true);
+            if($ali_prod!=$ali_prod2){         
+            
+                if(metadata_exists( 'post', $product_id_current, 'country' )){
+                    $country_prod1 = get_post_meta($product_id_current,'country',true);
+                }else{
+                    $kota_code = wc_get_base_location();
+                    $kota_code = $kota_code['country'];
+                    $kota_toko = WC()->countries->countries["$kota_code"];
+                    $country_prod1 = $kota_toko;
                 }
-                $supplier_prod2 = get_post_meta($product_id,'supplier_name',true);
-                if(!$supplier_prod2){
-                	$supplier_prod2 = get_post_meta($product_id,'warehouse_name',true);
+            
+                if(metadata_exists( 'post', $product_id, 'country' )){
+                    $country_prod2 = get_post_meta($product_id,'country',true);
+                }else{
+                    $kota_code = wc_get_base_location();
+                    $kota_code = $kota_code['country'];
+                    $kota_toko = WC()->countries->countries["$kota_code"];
+                    $country_prod2 = $kota_toko;
                 }
+            
+                if($country_prod1!=$country_prod2){
+                    $cur_lang = get_bloginfo( 'language' );
+                    if(strpos($cur_lang,'id') !== false)
+                        wc_add_notice( __( "Barang ini berasal dari negara yang berbeda dengan barang di cart. Klik (Ya, Ganti Cart Saya) untuk mengganti barang yang ada di cart dengan barang ini.", 'woocommerce' ), 'error' );
+                    else
+                        wc_add_notice( __( "This item is from a different country than the item in the cart. Click (Yes, Change My Cart) to replace the items in the cart with this item", 'woocommerce' ), 'error' );
+                    
+                    wp_register_script( "empty-cart-ali", plugin_dir_url(__FILE__).'/js/atca.js', array('jquery') );
 
-                if(($supplier_prod!=$supplier_prod2) || ($city_prod!=$city_prod2)){
-            //       wc_add_notice( __( "Barang ini berasal dari Gudang $supplier_prod2, $city_prod2 dan berbeda dengan barang di cart. Klik Kosongkan cart untuk mengganti barang yang ada di cart dengan barang ini.", 'woocommerce' ), 'error' );
+                    wp_localize_script( 'empty-cart-ali', 'myAjax', array( 
+                        'ajaxurl'     => admin_url( 'admin-ajax.php'),
+                        'vari_id'     => $variation_idi,
+                        'qty'         => $quantity,
+                        'prod_id'     => $product_id,
+                        'perma_link'  => $perma_link,
+                        'language'    => $cur_lang
+                    ));
 
-            //       wp_register_script( "empty-cart-ali", plugin_dir_url(__FILE__).'/js/atca.js', array('jquery') );
+                    wp_enqueue_script( 'jquery' );
+                    wp_enqueue_script( 'empty-cart-ali' );
 
-	           //   wp_localize_script( 'empty-cart-ali', 'myAjax', array( 
-	           //     'ajaxurl'     => admin_url( 'admin-ajax.php'),
-	           //     'vari_id'     => $variation_idi,
-	           //     'qty'         => $quantity,
-	           //     'prod_id'     => $product_id,
-	           //     'perma_link'  => $perma_link
-	           //   ));
+                    return false;              
+                }else{
+                    return $passed;
+                }      
+            }
+            else{
+                if($ali_prod==1){
+                    $country_prod = get_post_meta($product_id_current,'country',true);
+                    $country_prod2 = get_post_meta($product_id,'country',true);
+                    if($country_prod!=$country_prod2){
+                        $cur_lang = get_bloginfo( 'language' );
+                        if(strpos($cur_lang,'id') !== false)
+                            wc_add_notice( __( "Barang ini berasal dari negara $country_prod2 dan berbeda dengan barang di cart. Klik (Ya, Ganti Cart Saya) untuk mengganti barang yang ada di cart dengan barang ini.", 'woocommerce' ), 'error' );
+                        else
+                            wc_add_notice( __( "This item is from $country_prod2 and different country with the item in the cart . Click (Yes, Change My Cart) to replace the items in the cart with this item.", 'woocommerce' ), 'error' );
 
-	           //   wp_enqueue_script( 'jquery' );
-	           //   wp_enqueue_script( 'empty-cart-ali' );
-                  return $passed;  
+                        wp_register_script( "empty-cart-ali", plugin_dir_url(__FILE__).'/js/atca.js', array('jquery') );
+
+                        wp_localize_script( 'empty-cart-ali', 'myAjax', array( 
+                            'ajaxurl'     => admin_url( 'admin-ajax.php'),
+                            'vari_id'     => $variation_idi,
+                            'qty'         => $quantity,
+                            'prod_id'     => $product_id,
+                            'perma_link'  => $perma_link,
+                            'language'    => $cur_lang
+                        ));
+
+                        wp_enqueue_script( 'jquery' );
+                        wp_enqueue_script( 'empty-cart-ali' );
+
+                        return false;              
+                    }else{
+                        if($country_prod==$kota_toko){
+                            $city_prod = get_post_meta($product_id_current,'origin_city',true);
+                            if(!$city_prod){
+                                $city_prod = get_post_meta($product_id_current,'city',true);
+                            }
+
+                            $city_prod2 = get_post_meta($product_id,'origin_city',true);
+                            if(!$city_prod2){
+                                $city_prod2 = get_post_meta($product_id,'city',true);
+                            }
+
+                            $supplier_prod = get_post_meta($product_id_current,'supplier_name',true);
+                            if(!$supplier_prod){
+                                $supplier_prod = get_post_meta($product_id_current,'warehouse_name',true);
+                            }
+
+                            $supplier_prod2 = get_post_meta($product_id,'supplier_name',true);
+                            if(!$supplier_prod2){
+                                $supplier_prod2 = get_post_meta($product_id,'warehouse_name',true);
+                            }
+
+                            if(($supplier_prod!=$supplier_prod2) || ($city_prod!=$city_prod2)){
+                                return $passed;  
+                            }
+                            else{
+                                return $passed;
+                            }
+                        }
+                        else{
+                            return $passed;
+                        }
+                    }
                 }
                 else{
-                  return $passed;
+                    //add to cart tidak ada masalah karena sama2 ready stock
                 }
-              }
-              else{
-                return $passed;
-              }
             }
-          }
-          else{
-            //add to cart tidak ada masalah karena sama2 ready stock
-          }
         }
-
-      }
-
-      return $passed;
+        return $passed;
     }
     
     public function deleteImagesApi(){
@@ -421,298 +327,188 @@ class Ali_Connect_Wordpress
 
 
     public function restrictProduct(){
-      global $woocommerce;
-      $cart_contents    =  $woocommerce->cart->get_cart( );
-      $cart_item_keys   =  array_keys ( $cart_contents );
-      $cart_item_count  =  count ( $cart_item_keys );
-  
-      if ( ! $cart_contents || $cart_item_count == 1 ) {
+        global $woocommerce;
+        $cart_contents    =  $woocommerce->cart->get_cart( );
+        $cart_item_keys   =  array_keys ( $cart_contents );
+        $cart_item_count  =  count ( $cart_item_keys );
+
+        if ( ! $cart_contents || $cart_item_count == 1 ) {
             return null;
-      }
-
-      $first_item    =  $cart_item_keys[0];
-      $first_item_id =  $cart_contents[$first_item]['product_id'];
-        
-      // if((get_post_meta($first_item_id,'ali__is_ali_product',true)=='0') || (get_post_meta($first_item_id,'ali__is_ali_product',true)=='')){  
-      //   $first_item_type = 0;
-      // }else if(get_post_meta($first_item_id,'ali__is_ali_product',true)=='1'){
-      //   $first_item_type = 1;
-      // }  
-
-      // if(get_current_blog_id()==2421)
-      // {
-      //   echo get_post_meta($first_item_id,'ali__is_ali_product',true);
-      // }
-      $kota_code = WC_Countries::get_base_country();
-      $kota_toko = WC()->countries->countries["$kota_code"];
-
-      if((get_post_meta($first_item_id,'ali__is_ali_product',true)=='0') || (get_post_meta($first_item_id,'ali__is_ali_product',true)=='')){  
-        $first_item_origin = $kota_toko;
-      }else if(get_post_meta($first_item_id,'ali__is_ali_product',true)=='1'){
-        if(metadata_exists('post',$first_item_id,'country')){
-          $country_origin = get_post_meta($first_item_id,'country',true);
-          $first_item_origin = $country_origin;
-        }   
-      }
-
-      // if(metadata_exists('post',$first_item_id,'country')){
-      //   $country_origin = get_post_meta($first_item_id,'country',true);
-      //   if(strtolower($country_origin) == 'china'){
-      //     $first_item_origin = 1;
-      //   }else if(strtolower($country_origin) == 'thailand'){
-      //     $first_item_origin = 2;
-      //   }else if(strtolower($country_origin) == 'indonesia'){
-      //     $first_item_origin = 0;
-      //   }else{
-      //     $first_item_origin = 3;
-      //   }
-      // }else{
-      //   $first_item_origin = 0;
-      // }
-    //$first_item_type = get_product_validation($first_item_id);
-    //$first_item_origin = get_product_origin($first_item_id);
-    
-    foreach ( $cart_item_keys as $key ) {
-        if ( $key  ==  $first_item ) {
-            continue;
-        }else {
-          $product_id =  $cart_contents[$key]['product_id'];
-
-          if((get_post_meta($product_id,'ali__is_ali_product',true)=='0') || (get_post_meta($product_id,'ali__is_ali_product',true)=='')){  
-            $other_item_origin = $kota_toko;
-          }else if(get_post_meta($product_id,'ali__is_ali_product',true)=='1'){
-            if(metadata_exists('post',$product_id,'country')){
-              $country_origin = get_post_meta($product_id,'country',true);
-              $other_item_origin = $country_origin;
-            }
-          }
-
-          if($other_item_origin != $first_item_origin){
-              $mismatched_type = 1;
-          }
-
         }
-    }
 
-    if (isset($mismatched_type)) {
-        wc_add_notice( sprintf( '<strong>You need to purchase products from the Same Source Country. Please delete one of the products in the cart</strong>'), 'error' );
-    }  
+        $first_item    =  $cart_item_keys[0];
+        $first_item_id =  $cart_contents[$first_item]['product_id'];
+
+        $kota_code = WC_Countries::get_base_country();
+        $kota_toko = WC()->countries->countries["$kota_code"];
+
+        if((get_post_meta($first_item_id,'ali__is_ali_product',true)=='0') || (get_post_meta($first_item_id,'ali__is_ali_product',true)=='')){  
+            $first_item_origin = $kota_toko;
+        }else if(get_post_meta($first_item_id,'ali__is_ali_product',true)=='1'){
+            if(metadata_exists('post',$first_item_id,'country')){
+                $country_origin = get_post_meta($first_item_id,'country',true);
+                $first_item_origin = $country_origin;
+            }   
+        }
+
+        foreach ( $cart_item_keys as $key ) {
+            if ( $key  ==  $first_item ) {
+                continue;
+            }else {
+                $product_id =  $cart_contents[$key]['product_id'];
+
+                if((get_post_meta($product_id,'ali__is_ali_product',true)=='0') || (get_post_meta($product_id,'ali__is_ali_product',true)=='')){  
+                    $other_item_origin = $kota_toko;
+                }else if(get_post_meta($product_id,'ali__is_ali_product',true)=='1'){
+                    if(metadata_exists('post',$product_id,'country')){
+                        $country_origin = get_post_meta($product_id,'country',true);
+                        $other_item_origin = $country_origin;
+                    }
+                }
+
+                if($other_item_origin != $first_item_origin){
+                    $mismatched_type = 1;
+                }
+            }
+        }
+
+        if (isset($mismatched_type)) {
+            $cur_lang = get_bloginfo( 'language' );
+            if(strpos($cur_lang,'id') !== false)
+                wc_add_notice( sprintf( '<strong>Anda hanya bisa membeli barang dari negara yang sama. Mohon untuk menghapus salah satu product yang ada di keranjang belanja</strong>'), 'error' );
+            else
+                wc_add_notice( sprintf( '<strong>You need to purchase products from the Same Source Country. Please delete one of the products in the cart</strong>'), 'error' );
+            
+        } 
 
     }
 
 
     public function identifyProduct( $item_name,  $cart_item,  $cart_item_key ) {
-    // Display name and product id here instead
-      $product = wc_get_product($cart_item['product_id']);
-      $product_name = $product->get_name();
-      $is_product = get_post_meta($cart_item['product_id'],'ali__is_ali_product',true);
-      $url = get_permalink($cart_item['product_id']) ;
+        $product = wc_get_product($cart_item['product_id']);
+        $product_name = $product->get_name();
+        $is_product = get_post_meta($cart_item['product_id'],'ali__is_ali_product',true);
+        $url = get_permalink($cart_item['product_id']) ;
 
-      // if(get_current_blog_id()==2421)
-      // {
-      //   // $stock = get_post_meta( $cart_item['product_id'], '_stock', true );
-      //   var_dump($is_product);
-      //   echo"<br>";
-      // }
+        $infoname = get_bloginfo( 'name' );
 
-      $infoname = get_bloginfo( 'name' );
+        $kota_code = wc_get_base_location();
+        $kota_code = $kota_code['country'];
+        $kota_toko = WC()->countries->countries["$kota_code"];
+        $stock = get_post_meta( $cart_item['product_id'], '_stock', true );
 
-      $kota_code = WC_Countries::get_base_country();
-      $kota_toko = WC()->countries->countries["$kota_code"];
-      $stock = get_post_meta( $cart_item['product_id'], '_stock', true );
+        // $kota_gudang_woongkir = get_option('origin_city_gudang');
+        $kota_gudang_woongkir = WC_Countries::get_base_city();
 
-      // $kota_gudang_woongkir = get_option('origin_city_gudang');
-      $kota_gudang_woongkir = WC_Countries::get_base_city();
-
-      if($is_product == '0' || $is_product == ''){
-
-        $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Pengiriman dari Gudang ".$infoname.", ".$kota_gudang_woongkir.", ".$kota_toko."</strong></font>";
-
-      }else if($is_product == '1'){        
-       
-        if(metadata_exists('post',$cart_item['product_id'],'country')){
-          $country_origin = get_post_meta($cart_item['product_id'],'country',true);
-          $country_lowercase = strtolower($country_origin);
-          if($country_lowercase == strtolower($kota_toko)){
-            $supplier_name = get_post_meta($cart_item['product_id'],'supplier_name',true);
-            if(metadata_exists( 'post', $cart_item['product_id'], 'warehouse_name' )){
-            	$supplier_name = get_post_meta($cart_item['product_id'],'warehouse_name',true);            	 
-            }
-            if(!empty($supplier_name) || $supplier_name!=''){
-              $kota_produk = get_post_meta($cart_item['product_id'],'origin_city',true);
-              if(!$kota_produk){
-              	$kota_produk = get_post_meta($cart_item['product_id'],'city',true);
-              }
-              $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Pengiriman dari Gudang ".$supplier_name.", ".$kota_produk.", ".$country_origin."</strong></font>";
-            }
+        if($is_product == '0' || $is_product == ''){
+            
+            $cur_lang = get_bloginfo( 'language' );
+            if(strpos($cur_lang,'id') !== false)
+                $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Pengiriman dari Gudang ".$infoname.", ".$kota_gudang_woongkir.", ".$kota_toko."</strong></font>";
             else
-            {
-              $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Pengiriman dari Gudang ".$country_origin."</strong></font>";
+                $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Sent From ".$infoname." Warehouse , ".$kota_gudang_woongkir.", ".$kota_toko."</strong></font>";
+
+        }else if($is_product == '1'){        
+        
+            if(metadata_exists('post',$cart_item['product_id'],'country')){
+                
+                $country_origin = get_post_meta($cart_item['product_id'],'country',true);
+                $country_lowercase = strtolower($country_origin);
+
+                if($country_lowercase == strtolower($kota_toko)){
+
+                    $supplier_name = get_post_meta($cart_item['product_id'],'supplier_name',true);
+                    if(metadata_exists( 'post', $cart_item['product_id'], 'warehouse_name' )){
+                        $supplier_name = get_post_meta($cart_item['product_id'],'warehouse_name',true);            	 
+                    }
+
+                    if(!empty($supplier_name) || $supplier_name!=''){                        
+                        $kota_produk = get_post_meta($cart_item['product_id'],'origin_city',true);
+                        if(!$kota_produk){
+                            $kota_produk = get_post_meta($cart_item['product_id'],'city',true);
+                        }
+
+                        $cur_lang = get_bloginfo( 'language' );
+                        if(strpos($cur_lang,'id') !== false)
+                            $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Pengiriman dari Gudang ".$supplier_name.", ".$kota_produk.", ".$country_origin."</strong></font>";
+                        else
+                            $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Sent From ".$supplier_name." Warehouse , ".$kota_produk.", ".$country_origin."</strong></font>";
+                    }else{
+                        $cur_lang = get_bloginfo( 'language' );
+                        if(strpos($cur_lang,'id') !== false)
+                            $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Pengiriman dari Gudang ".$country_origin."</strong></font>";
+                        else
+                            $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Sent From ".$country_origin." Warehouse </strong></font>";
+                    }
+                }else{
+                    $cur_lang = get_bloginfo( 'language' );
+                    if(strpos($cur_lang,'id') !== false)
+                        $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Pengiriman dari Gudang ".$country_origin."</strong></font>";
+                    else
+                        $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Sent From ".$country_origin." Warehouse </strong></font>";
+                }
+                
+            }else{
+                $cur_lang = get_bloginfo( 'language' );
+                if(strpos($cur_lang,'id') !== false)
+                    $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Pengiriman dari Gudang $infoname</strong></font>";
+                else
+                    $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Sent From $infoname Warehouse</strong></font>";
             }
-          }else{
-            $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Pengiriman dari Gudang ".$country_origin."</strong></font>";
-          }
-          
-        }else{
-          $display =  "<a href='".$url."'>".$product_name."</a></br><font color='black'><strong>Pengiriman dari Gudang No Country</strong></font>";
         }
 
-      }
-
-      return $display;
+        return $display;
     }
 
 
 
     public function disable_checkout_button_no_shipping() { 
-      // global $woocommerce;
-      // $cart_contents    =  $woocommerce->cart->get_cart( );
-      // $cart_item_keys   =  array_keys ( $cart_contents );
-      // $cart_item_count  =  count ( $cart_item_keys );
-  
-      // if ( ! $cart_contents || $cart_item_count == 1 ) {
-      //       return null;
-      //   }
-
-      //   $first_item    =  $cart_item_keys[0];
-      //   $first_item_id =  $cart_contents[$first_item]['product_id'];
-        
-      //   if(get_post_meta($first_item_id,'ali__is_ali_product',true)=='1'){  
-      //     $first_item_type = 1;
-      //   }else{
-      //     $first_item_type = 0;
-      //   }
-
-      //   if(metadata_exists('post',$first_item_id,'country')){
-      //       $country_origin = get_post_meta($first_item_id,'country',true);
-      //       if(strtolower($country_origin) == 'china'){
-      //         $first_item_origin = 1;
-      //       }else if(strtolower($country_origin) == 'thailand'){
-      //         $first_item_origin = 2;
-      //       }else if(strtolower($country_origin) == 'indonesia'){
-      //         $first_item_origin = 0;
-      //       }else{
-      //         $first_item_origin = 3;
-      //       }
-      //   }else{
-      //       $first_item_origin = 0;
-      //   }
-      //   //$first_item_type = get_product_validation($first_item_id);
-      //   //$first_item_origin = get_product_origin($first_item_id);
-        
-      //   foreach ( $cart_item_keys as $key ) {
-      //       if ( $key  ==  $first_item ) {
-      //           continue;
-      //       }else {
-      //         $product_id =  $cart_contents[$key]['product_id'];
-      //         //$product_validation  =  get_product_validation($product_id);
-
-      //         if(get_post_meta($product_id,'ali__is_ali_product',true)=='1'){  
-      //           $product_validation = 1;
-      //         }else{
-      //           $product_validation = 0;
-      //         }
-
-      //         //$product_origin = get_product_origin($product_id);
-
-      //         if(metadata_exists('post',$product_id,'country')){
-      //             $country_originn = get_post_meta($product_id,'country',true);
-      //             if(strtolower($country_originn) == 'china'){
-      //               $product_origin = 1;
-      //             }else if(strtolower($country_originn) == 'thailand'){
-      //               $product_origin = 2;
-      //             }else if(strtolower($country_originn) == 'indonesia'){
-      //               $product_origin = 0;
-      //             }else{
-      //               $product_origin = 3;
-      //             }
-      //         }else{
-      //             $product_origin = 0;
-      //         }
-
-      //         if ( $product_validation  !=  $first_item_type ) {
-      //               //$woocommerce->cart->set_quantity ( $key, 0, true );
-      //               $mismatched_type  =  1;
-      //         }
-
-      //         if($product_origin != $first_item_origin){
-      //             $mismatched_type = 1;
-      //         }
-
-      //       }
-      //   }
+      
         global $woocommerce;
-      $cart_contents    =  $woocommerce->cart->get_cart( );
-      $cart_item_keys   =  array_keys ( $cart_contents );
-      $cart_item_count  =  count ( $cart_item_keys );
-  
-      if ( ! $cart_contents || $cart_item_count == 1 ) {
+        $cart_contents    =  $woocommerce->cart->get_cart( );
+        $cart_item_keys   =  array_keys ( $cart_contents );
+        $cart_item_count  =  count ( $cart_item_keys );
+
+        if ( ! $cart_contents || $cart_item_count == 1 ) {
             return null;
-      }
-
-      $first_item    =  $cart_item_keys[0];
-      $first_item_id =  $cart_contents[$first_item]['product_id'];
-        
-      // if((get_post_meta($first_item_id,'ali__is_ali_product',true)=='0') || (get_post_meta($first_item_id,'ali__is_ali_product',true)=='')){  
-      //   $first_item_type = 0;
-      // }else if(get_post_meta($first_item_id,'ali__is_ali_product',true)=='1'){
-      //   $first_item_type = 1;
-      // }  
-
-      // if(get_current_blog_id()==2421)
-      // {
-      //   echo get_post_meta($first_item_id,'ali__is_ali_product',true);
-      // }
-      $kota_code = WC_Countries::get_base_country();
-      $kota_toko = WC()->countries->countries["$kota_code"];
-
-      if((get_post_meta($first_item_id,'ali__is_ali_product',true)=='0') || (get_post_meta($first_item_id,'ali__is_ali_product',true)=='')){  
-        $first_item_origin = $kota_toko;
-      }else if(get_post_meta($first_item_id,'ali__is_ali_product',true)=='1'){
-        if(metadata_exists('post',$first_item_id,'country')){
-          $country_origin = get_post_meta($first_item_id,'country',true);
-          $first_item_origin = $country_origin;
-        }   
-      }
-
-      // if(metadata_exists('post',$first_item_id,'country')){
-      //   $country_origin = get_post_meta($first_item_id,'country',true);
-      //   if(strtolower($country_origin) == 'china'){
-      //     $first_item_origin = 1;
-      //   }else if(strtolower($country_origin) == 'thailand'){
-      //     $first_item_origin = 2;
-      //   }else if(strtolower($country_origin) == 'indonesia'){
-      //     $first_item_origin = 0;
-      //   }else{
-      //     $first_item_origin = 3;
-      //   }
-      // }else{
-      //   $first_item_origin = 0;
-      // }
-    //$first_item_type = get_product_validation($first_item_id);
-    //$first_item_origin = get_product_origin($first_item_id);
-    
-    foreach ( $cart_item_keys as $key ) {
-        if ( $key  ==  $first_item ) {
-            continue;
-        }else {
-          $product_id =  $cart_contents[$key]['product_id'];
-
-          if((get_post_meta($product_id,'ali__is_ali_product',true)=='0') || (get_post_meta($product_id,'ali__is_ali_product',true)=='')){  
-            $other_item_origin = $kota_toko;
-          }else if(get_post_meta($product_id,'ali__is_ali_product',true)=='1'){
-            if(metadata_exists('post',$product_id,'country')){
-              $country_origin = get_post_meta($product_id,'country',true);
-              $other_item_origin = $country_origin;
-            }
-          }
-
-          if($other_item_origin != $first_item_origin){
-              $mismatched_type = 1;
-          }
-
         }
-    }
+
+        $first_item    =  $cart_item_keys[0];
+        $first_item_id =  $cart_contents[$first_item]['product_id'];
+
+        $kota_code = wc_get_base_location();
+        $kota_code = $kota_code['country'];
+        $kota_toko = WC()->countries->countries["$kota_code"];
+
+        if((get_post_meta($first_item_id,'ali__is_ali_product',true)=='0') || (get_post_meta($first_item_id,'ali__is_ali_product',true)=='')){  
+            $first_item_origin = $kota_toko;
+        }else if(get_post_meta($first_item_id,'ali__is_ali_product',true)=='1'){
+            if(metadata_exists('post',$first_item_id,'country')){
+                $country_origin = get_post_meta($first_item_id,'country',true);
+                $first_item_origin = $country_origin;
+            }   
+        }
+
+        foreach ( $cart_item_keys as $key ) {
+            if ( $key  ==  $first_item ) {
+                continue;
+            }else {
+                $product_id =  $cart_contents[$key]['product_id'];
+
+                if((get_post_meta($product_id,'ali__is_ali_product',true)=='0') || (get_post_meta($product_id,'ali__is_ali_product',true)=='')){  
+                    $other_item_origin = $kota_toko;
+                }else if(get_post_meta($product_id,'ali__is_ali_product',true)=='1'){
+                    if(metadata_exists('post',$product_id,'country')){
+                        $country_origin = get_post_meta($product_id,'country',true);
+                        $other_item_origin = $country_origin;
+                    }
+                }
+
+                if($other_item_origin != $first_item_origin){
+                    $mismatched_type = 1;
+                }
+            }
+        }
 
         if (isset($mismatched_type)) {
             remove_action( 'woocommerce_proceed_to_checkout', 'woocommerce_button_proceed_to_checkout', 20 );
@@ -720,9 +516,7 @@ class Ali_Connect_Wordpress
         }  
     }
 
-    public function enqueue_load_fa()
-
-    {
+    public function enqueue_load_fa(){
 
         wp_enqueue_style('load-fa', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 
@@ -730,9 +524,7 @@ class Ali_Connect_Wordpress
 
 
 
-    public function decorateProductResponse($object, $request, $create)
-
-    {
+    public function decorateProductResponse($object, $request, $create){
 
         $importFrom = $request->get_param('import_from');
 
@@ -865,192 +657,386 @@ class Ali_Connect_Wordpress
 
         $endDate = date($format, time() + (21 * $day));
         $ali_proddd = get_post_meta($d,'ali__is_ali_product',true);
+        $infoname = get_bloginfo( 'name' );
 
         if(metadata_exists('post',$d,'country')){
 
-          $country_origin = get_post_meta($d,'country',true);
-          $country_overwrite = get_post_meta($d,'origin_country',true);
-          if($country_overwrite){
-             $country_origin =  $country_overwrite;
-          }          
+            $country_origin = get_post_meta($d,'country',true);
+            $country_overwrite = get_post_meta($d,'origin_country',true);
+            if($country_overwrite){
+                $country_origin =  $country_overwrite;
+            }          
 
-          if($country_origin == 'China'){
-            echo "<br><br>";
-            echo 
-"<style>" .
-"* {  box-sizing: border-box; }" .
-".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
-".infoproduk:after {  content: '';   display: table;  clear: both; }" .
-"@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
-"<div class='infoproduk'>" .
-" <div class='column2'>" .
-" <h4 style='margin-top: 0; padding-top: 0'>Pengiriman dari</h4>" .
-"     <i class='fas fa-globe'></i> <span>Origin : Gudang China<br><i class='fas fa-truck'></i>";
-$arrival_info = get_post_meta($d,'arrival_info',true);
-if($arrival_info){
-  echo " Estimate Delivery : $arrival_info<br><br></span>";
-}
-else{
-  echo " Estimate Delivery : 7-14 Hari<br><br></span>";
-}
+            if($country_origin == 'China'){
+                $cur_lang = get_bloginfo( 'language' );
+                if(strpos($cur_lang,'id') !== false){
+                    echo "<br><br>";
+                    echo 
+                        "<style>" .
+                        "* {  box-sizing: border-box; }" .
+                        ".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
+                        ".infoproduk:after {  content: '';   display: table;  clear: both; }" .
+                        "@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
+                        "<div class='infoproduk'>" .
+                        " <div class='column2'>" .
+                        " <h4 style='margin-top: 0; padding-top: 0'>Pengiriman dari</h4>" .
+                        "     <i class='fas fa-globe'></i> <span>Origin : Gudang China<br><i class='fas fa-truck'></i>";
+                    $arrival_info = get_post_meta($d,'arrival_info',true);
+                    if($arrival_info){
+                        echo " Estimasi Pengiriman : $arrival_info<br><br></span>";
+                    }
+                    else{
+                        echo " Estimasi Pengiriman : 7-14 Hari<br><br></span>";
+                    }
 
-echo 
-"   </div>" .
-" <div class='column2'>" .
-" <h4 style='margin-top: 0; padding-top: 0'>Notice </h4>" .
-"     <i class='far fa-money-bill-alt'></i> <span>Barang ini dikirim dari luar negeri dan ada kemungkinan delay selama masa Covid-19</span>" .
-"   </div>" .
-"</div>" .
+                    echo 
+                        "   </div>" .
+                        " <div class='column2'>" .
+                        " <h4 style='margin-top: 0; padding-top: 0'>Notice </h4>" .
+                        "     <i class='far fa-money-bill-alt'></i> <span>Barang ini dikirim dari luar negeri dan ada kemungkinan delay selama masa Covid-19</span>" .
+                        "   </div>" .
+                        "</div>" .
 
-      "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
+                            "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
 
-            "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
+                                    "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
 
-            "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
+                                    "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
 
-            "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
-            "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
+                                    "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
+                                    "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
 
-            "<!--<span>{$startDate} - {$endDate}</span>-->" .
+                                    "<!--<span>{$startDate} - {$endDate}</span>-->" .
 
-            "<!--</div></br>-->";
+                                    "<!--</div></br>-->";
+                }
+                else{
+                    echo "<br><br>";
+                    echo 
+                        "<style>" .
+                        "* {  box-sizing: border-box; }" .
+                        ".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
+                        ".infoproduk:after {  content: '';   display: table;  clear: both; }" .
+                        "@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
+                        "<div class='infoproduk'>" .
+                        " <div class='column2'>" .
+                        " <h4 style='margin-top: 0; padding-top: 0'>Sent From</h4>" .
+                        "     <i class='fas fa-globe'></i> <span>Origin : China Warehouse<br><i class='fas fa-truck'></i>";
+                    $arrival_info = get_post_meta($d,'arrival_info',true);
+                    if($arrival_info){
+                        echo " Estimate Delivery : $arrival_info<br><br></span>";
+                    }
+                    else{
+                        echo " Estimate Delivery : 7-14 Days<br><br></span>";
+                    }
 
-          }else if($country_origin == 'Thailand'){
-            echo "<br><br>";
-            echo 
-"<style>" .
-"* {  box-sizing: border-box; }" .
-".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
-".infoproduk:after {  content: '';   display: table;  clear: both; }" .
-"@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
+                    echo 
+                        "   </div>" .
+                        " <div class='column2'>" .
+                        " <h4 style='margin-top: 0; padding-top: 0'>Notice </h4>" .
+                        "     <i class='far fa-money-bill-alt'></i> <span>This Item Sent from abroad and there is a possibility of delay during the Covid-19 period</span>" .
+                        "   </div>" .
+                        "</div>" .
 
-"<div class='infoproduk'>" .
-" <div class='column2'>" .
-" <h4 style='margin-top: 0; padding-top: 0'>Pengiriman dari</h4>" .
-"     <i class='fas fa-globe'></i> <span>Origin : Gudang Thailand <br><i class='fas fa-truck'></i> Lama Pengiriman: 3-7 Hari<br></span>" .
-"   </div>" .
-" <div class='column2'>" .
-" <h4 style='margin-top: 0; padding-top: 0'>Kualitas produk </h4>" .
-"     <i class='far fa-money-bill-alt'></i> <span>Harga terbaik<br><i class='far fa-thumbs-up'></i> Best Collection<br></span>" .
-"   </div>" .
-"</div>" .
+                            "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
 
-      "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
+                                    "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
 
-            "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
+                                    "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
 
-            "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
+                                    "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
+                                    "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
 
-            "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
-            "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
+                                    "<!--<span>{$startDate} - {$endDate}</span>-->" .
 
-            "<!--<span>{$startDate} - {$endDate}</span>-->" .
+                                    "<!--</div></br>-->";
+                }
+            }else if($country_origin == 'Thailand'){
+                $cur_lang = get_bloginfo( 'language' );
+                if(strpos($cur_lang,'id') !== false){
+                    echo "<br><br>";
+                    echo 
+                        "<style>" .
+                        "* {  box-sizing: border-box; }" .
+                        ".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
+                        ".infoproduk:after {  content: '';   display: table;  clear: both; }" .
+                        "@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
 
-            "<!--</div></br>-->";
-          }else if($country_origin == 'Indonesia'){
-             echo "<br><br>";
-             if($ali_proddd!='1'){
-	             echo 
-	"<style>" .
-	"* {  box-sizing: border-box; }" .
-	".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
-	".infoproduk:after {  content: '';   display: table;  clear: both; }" .
-	"@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
+                        "<div class='infoproduk'>" .
+                        " <div class='column2'>" .
+                        " <h4 style='margin-top: 0; padding-top: 0'>Pengiriman dari</h4>" .
+                        "     <i class='fas fa-globe'></i> <span>Origin : Gudang Thailand <br><i class='fas fa-truck'></i> Lama Pengiriman: 3-7 Hari<br></span>" .
+                        "   </div>" .
+                        " <div class='column2'>" .
+                        " <h4 style='margin-top: 0; padding-top: 0'>Kualitas produk </h4>" .
+                        "     <i class='far fa-money-bill-alt'></i> <span>Harga terbaik<br><i class='far fa-thumbs-up'></i> Best Collection<br></span>" .
+                        "   </div>" .
+                        "</div>" .
 
-	"<div class='infoproduk'>" .
-	" <div class='column2'>" .
-	" <h4 style='margin-top: 0; padding-top: 0'>Pengiriman dari</h4>" .
-	"     <i class='fas fa-globe'></i> <span>Origin : Gudang Indonesia <br><i class='fas fa-truck'></i></span>" .
-	"   </div>" .
-	" <div class='column2'>" .
-	" <h4 style='margin-top: 0; padding-top: 0'>Kualitas produk </h4>" .
-	"     <i class='far fa-money-bill-alt'></i> <span>Harga terbaik<br><i class='far fa-thumbs-up'></i> Best Collection<br></span>" .
-	"   </div>" .
-	"</div>" .
+                            "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
 
-	      "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
+                                    "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
 
-	            "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
+                                    "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
 
-	            "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
+                                    "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
+                                    "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
 
-	            "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
-	            "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
+                                    "<!--<span>{$startDate} - {$endDate}</span>-->" .
 
-	            "<!--<span>{$startDate} - {$endDate}</span>-->" .
+                                    "<!--</div></br>-->";
+                }
+                else{
+                    echo "<br><br>";
+                    echo 
+                        "<style>" .
+                        "* {  box-sizing: border-box; }" .
+                        ".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
+                        ".infoproduk:after {  content: '';   display: table;  clear: both; }" .
+                        "@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
 
-	            "<!--</div></br>-->";
-        	}
-        	else{
-        	    
-        		$supplier_proddd = get_post_meta($d,'supplier_name',true);
-        		if(metadata_exists( 'post', $d, 'warehouse_name' )){
-            		$supplier_proddd = get_post_meta($d,'warehouse_name',true);            	 
-            	}
-        		echo 
-	"<style>" .
-	"* {  box-sizing: border-box; }" .
-	".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
-	".infoproduk:after {  content: '';   display: table;  clear: both; }" .
-	"@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
+                        "<div class='infoproduk'>" .
+                        " <div class='column2'>" .
+                        " <h4 style='margin-top: 0; padding-top: 0'>Sent From</h4>" .
+                        "     <i class='fas fa-globe'></i> <span>Origin : Thai Warehouse <br><i class='fas fa-truck'></i> Estimate Delivery : 3-7 Days<br></span>" .
+                        "   </div>" .
+                        " <div class='column2'>" .
+                        " <h4 style='margin-top: 0; padding-top: 0'>Quality Product </h4>" .
+                        "     <i class='far fa-money-bill-alt'></i> <span>Best Price<br><i class='far fa-thumbs-up'></i> Best Collection<br></span>" .
+                        "   </div>" .
+                        "</div>" .
 
-	"<div class='infoproduk'>" .
-	" <div class='column2'>" .
-	" <h4 style='margin-top: 0; padding-top: 0'>Pengiriman dari</h4>" .
-	"     <i class='fas fa-globe'></i> <span>Origin : Gudang $supplier_proddd <br><i class='fas fa-truck'></i></span>" .
-	"   </div>" .
-	" <div class='column2'>" .
-	" <h4 style='margin-top: 0; padding-top: 0'>Kualitas produk </h4>" .
-	"     <i class='far fa-money-bill-alt'></i> <span>Harga terbaik<br><i class='far fa-thumbs-up'></i> Best Collection<br></span>" .
-	"   </div>" .
-	"</div>" .
+                            "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
 
-	      "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
+                                    "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
 
-	            "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
+                                    "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
 
-	            "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
+                                    "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
+                                    "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
 
-	            "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
-	            "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
+                                    "<!--<span>{$startDate} - {$endDate}</span>-->" .
 
-	            "<!--<span>{$startDate} - {$endDate}</span>-->" .
+                                    "<!--</div></br>-->";
+                }
+            }else if($country_origin == 'Indonesia'){
+                $cur_lang = get_bloginfo( 'language' );
+                if(strpos($cur_lang,'id') !== false){
+                    echo "<br><br>";
+                    if($ali_proddd!='1'){
+                        echo 
+                            "<style>" .
+                            "* {  box-sizing: border-box; }" .
+                            ".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
+                            ".infoproduk:after {  content: '';   display: table;  clear: both; }" .
+                            "@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
 
-	            "<!--</div></br>-->";
-        	}
-          }else{
-            echo "<br><br>";
-                         echo
-              "<style>" .
-              "* {  box-sizing: border-box; }" .
-              ".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
-              ".infoproduk:after {  content: '';   display: table;  clear: both; }" .
-              "@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
+                            "<div class='infoproduk'>" .
+                            " <div class='column2'>" .
+                            " <h4 style='margin-top: 0; padding-top: 0'>Pengiriman dari</h4>" .
+                            "     <i class='fas fa-globe'></i> <span>Origin : Gudang $infoname <br><i class='fas fa-truck'></i></span>" .
+                            "   </div>" .
+                            " <div class='column2'>" .
+                            " <h4 style='margin-top: 0; padding-top: 0'>Kualitas produk </h4>" .
+                            "     <i class='far fa-money-bill-alt'></i> <span>Harga terbaik<br><i class='far fa-thumbs-up'></i> Koleksi Terbaik<br></span>" .
+                            "   </div>" .
+                            "</div>" .
 
-              "<div class='infoproduk'>" .
-              " <div class='column2'>" .
-              " <h4 style='margin-top: 0; padding-top: 0'>Pengiriman dari Luar Negeri</h4>" .
-              "     <i class='fas fa-globe'></i> <span>Origin : Gudang Luar Negeri <br><i class='fas fa-truck'></i> Lama Pengiriman: 3-14 Hari<br></span>" .
-              "   </div>" .
-              " <div class='column2'>" .
-              " <h4 style='margin-top: 0; padding-top: 0'>Kualitas produk </h4>" .
-              "     <i class='far fa-money-bill-alt'></i> <span>Harga terbaik<br><i class='far fa-thumbs-up'></i> Best Collection<br></span>" .
-              "   </div>" .
-              "</div>" .
+                                "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
 
-                    "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
+                                        "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
 
-                          "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
+                                        "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
 
-                          "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
+                                        "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
+                                        "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
 
-                          "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
-                          "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
+                                        "<!--<span>{$startDate} - {$endDate}</span>-->" .
 
-                          "<!--<span>{$startDate} - {$endDate}</span>-->" .
+                                        "<!--</div></br>-->";
+                    }
+                    else{
+                        
+                        $supplier_proddd = get_post_meta($d,'supplier_name',true);
+                        if(metadata_exists( 'post', $d, 'warehouse_name' )){
+                            $supplier_proddd = get_post_meta($d,'warehouse_name',true);            	 
+                        }
+                        echo 
+                            "<style>" .
+                            "* {  box-sizing: border-box; }" .
+                            ".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
+                            ".infoproduk:after {  content: '';   display: table;  clear: both; }" .
+                            "@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
 
-                          "<!--</div></br>-->";
-          }
+                            "<div class='infoproduk'>" .
+                            " <div class='column2'>" .
+                            " <h4 style='margin-top: 0; padding-top: 0'>Pengiriman dari</h4>" .
+                            "     <i class='fas fa-globe'></i> <span>Origin : Gudang $supplier_proddd <br><i class='fas fa-truck'></i></span>" .
+                            "   </div>" .
+                            " <div class='column2'>" .
+                            " <h4 style='margin-top: 0; padding-top: 0'>Kualitas produk </h4>" .
+                            "     <i class='far fa-money-bill-alt'></i> <span>Harga terbaik<br><i class='far fa-thumbs-up'></i> Koleksi Terbaik<br></span>" .
+                            "   </div>" .
+                            "</div>" .
+
+                                    "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
+
+                                        "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
+
+                                        "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
+
+                                        "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
+                                        "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
+
+                                        "<!--<span>{$startDate} - {$endDate}</span>-->" .
+
+                                        "<!--</div></br>-->";
+                    }
+                }
+                else{
+                    echo "<br><br>";
+                    if($ali_proddd!='1'){
+                        echo 
+                            "<style>" .
+                            "* {  box-sizing: border-box; }" .
+                            ".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
+                            ".infoproduk:after {  content: '';   display: table;  clear: both; }" .
+                            "@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
+
+                            "<div class='infoproduk'>" .
+                            " <div class='column2'>" .
+                            " <h4 style='margin-top: 0; padding-top: 0'>Sent From</h4>" .
+                            "     <i class='fas fa-globe'></i> <span>Origin : $infoname Warehouse <br><i class='fas fa-truck'></i></span>" .
+                            "   </div>" .
+                            " <div class='column2'>" .
+                            " <h4 style='margin-top: 0; padding-top: 0'>Product Quality </h4>" .
+                            "     <i class='far fa-money-bill-alt'></i> <span>Best Price<br><i class='far fa-thumbs-up'></i> Best Collection<br></span>" .
+                            "   </div>" .
+                            "</div>" .
+
+                                "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
+
+                                        "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
+
+                                        "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
+
+                                        "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
+                                        "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
+
+                                        "<!--<span>{$startDate} - {$endDate}</span>-->" .
+
+                                        "<!--</div></br>-->";
+                    }
+                    else{
+                        
+                        $supplier_proddd = get_post_meta($d,'supplier_name',true);
+                        if(metadata_exists( 'post', $d, 'warehouse_name' )){
+                            $supplier_proddd = get_post_meta($d,'warehouse_name',true);            	 
+                        }
+                        echo 
+                            "<style>" .
+                            "* {  box-sizing: border-box; }" .
+                            ".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
+                            ".infoproduk:after {  content: '';   display: table;  clear: both; }" .
+                            "@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
+
+                            "<div class='infoproduk'>" .
+                            " <div class='column2'>" .
+                            " <h4 style='margin-top: 0; padding-top: 0'>Sent From</h4>" .
+                            "     <i class='fas fa-globe'></i> <span>Origin : $supplier_proddd Warehouse <br><i class='fas fa-truck'></i></span>" .
+                            "   </div>" .
+                            " <div class='column2'>" .
+                            " <h4 style='margin-top: 0; padding-top: 0'>Product Quality </h4>" .
+                            "     <i class='far fa-money-bill-alt'></i> <span>Best Price<br><i class='far fa-thumbs-up'></i> Best Collection<br></span>" .
+                            "   </div>" .
+                            "</div>" .
+
+                                    "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
+
+                                        "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
+
+                                        "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
+
+                                        "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
+                                        "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
+
+                                        "<!--<span>{$startDate} - {$endDate}</span>-->" .
+
+                                        "<!--</div></br>-->";
+                    }
+                }
+                
+            }else{
+                $cur_lang = get_bloginfo( 'language' );
+                if(strpos($cur_lang,'id') !== false){
+                    echo "<br><br>";
+                    echo
+                    "<style>" .
+                    "* {  box-sizing: border-box; }" .
+                    ".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
+                    ".infoproduk:after {  content: '';   display: table;  clear: both; }" .
+                    "@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
+
+                    "<div class='infoproduk'>" .
+                    " <div class='column2'>" .
+                    " <h4 style='margin-top: 0; padding-top: 0'>Pengiriman dari Luar Negeri</h4>" .
+                    "     <i class='fas fa-globe'></i> <span>Origin : Gudang Luar Negeri <br><i class='fas fa-truck'></i> Lama Pengiriman: 3-14 Hari<br></span>" .
+                    "   </div>" .
+                    " <div class='column2'>" .
+                    " <h4 style='margin-top: 0; padding-top: 0'>Kualitas produk </h4>" .
+                    "     <i class='far fa-money-bill-alt'></i> <span>Harga terbaik<br><i class='far fa-thumbs-up'></i> Koleksi Terbaik<br></span>" .
+                    "   </div>" .
+                    "</div>" .
+
+                            "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
+
+                                "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
+
+                                "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
+
+                                "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
+                                "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
+
+                                "<!--<span>{$startDate} - {$endDate}</span>-->" .
+
+                                "<!--</div></br>-->";
+                }
+                else{
+                    echo "<br><br>";
+                    echo
+                    "<style>" .
+                    "* {  box-sizing: border-box; }" .
+                    ".column2 {  float: left;width: 50% ;   padding: 10px; border: 1px dotted #ddd}" .
+                    ".infoproduk:after {  content: '';   display: table;  clear: both; }" .
+                    "@media screen and (max-width: 500px) { .column2 {width: 100%; padding: 12px; border: 1px dotted #ddd } } </style>" .
+
+                    "<div class='infoproduk'>" .
+                    " <div class='column2'>" .
+                    " <h4 style='margin-top: 0; padding-top: 0'>Sent From Abroad</h4>" .
+                    "     <i class='fas fa-globe'></i> <span>Origin : Overseas Warehouse <br><i class='fas fa-truck'></i> Estimate Delivery: 3-14 Days<br></span>" .
+                    "   </div>" .
+                    " <div class='column2'>" .
+                    " <h4 style='margin-top: 0; padding-top: 0'>Product Quality </h4>" .
+                    "     <i class='far fa-money-bill-alt'></i> <span>Best Price<br><i class='far fa-thumbs-up'></i> Best Collection<br></span>" .
+                    "   </div>" .
+                    "</div>" .
+
+                            "<!--<div style='background: #fff; padding: 12px; border: 1px dotted #ddd'>-->" .
+
+                                "<!--<p style='font-weight: 300'><i class='fa fa-plane'></i> Goods shipped from China.</p>-->" .
+
+                                "<!--<h4 style='margin-top: 0; padding-top: 0'>Barang Pre-Order</h4>-->" .
+
+                                "<!--<i class='fas fa-globe'></i> <span>Pengiriman dari : Luar Negeri<br><i class='fas fa-truck'></i> Lama Pengiriman : 14-21 Hari<br></span>-->" .
+                                "<!--<span>Wholesale order delivery within 30 days.</span>-->" .
+
+                                "<!--<span>{$startDate} - {$endDate}</span>-->" .
+
+                                "<!--</div></br>-->";
+                }
+                
+            }
+          
         }
     }
     
@@ -1091,16 +1077,29 @@ echo
             $endDate = date($format, time() + (14 * $day));
 
 
+            $cur_lang = get_bloginfo( 'language' );
+            if(strpos($cur_lang,'id') !== false){
+                echo "<div style='background: #ededed; padding: 12px;'>" .
 
-            echo "<div style='background: #ededed; padding: 12px;'>" .
+                    "<p style='font-weight: 300'><i class='fa fa-plane'></i> Beberapa pesanan adalah barang dengan pengiriman dari luar negeri.</p>" .
 
-                "<p style='font-weight: 300'><i class='fa fa-plane'></i> Beberapa pesanan adalah barang dengan pengiriman dari luar negeri.</p>" .
+                    "<!--<h4 style='margin-top: 0; padding-top: 0'>Estimasi sampai</h4>-->" .
 
-                "<!--<h4 style='margin-top: 0; padding-top: 0'>Estimasi sampai</h4>-->" .
+                    "<span><b>Estimasi sampai</b> : 7-14 hari<br>{$startDate} - {$endDate}</span>" .
 
-                "<span><b>Estimasi sampai</b> : 7-14 hari<br>{$startDate} - {$endDate}</span>" .
+                    "</div>";
+            }
+            else{
+                echo "<div style='background: #ededed; padding: 12px;'>" .
 
-                "</div>";
+                    "<p style='font-weight: 300'><i class='fa fa-plane'></i> Some orders are items shipped from overseas.</p>" .
+
+                    "<!--<h4 style='margin-top: 0; padding-top: 0'>Estimated arrival</h4>-->" .
+
+                    "<span><b>Estimated arrival</b> : 7-14 Days<br>{$startDate} - {$endDate}</span>" .
+
+                    "</div>";
+            }
 
         }
 
@@ -1317,15 +1316,21 @@ add_action('wp_ajax_nopriv_make_empty_ali_cart', 'make_empty_ali_cart');
 function make_empty_ali_cart() {
   if( ! WC()->cart->is_empty() ){
     WC()->cart->empty_cart();
-    // if(get_current_blog_id()==2421){
-      // echo json_encode($_POST,true);
-      if(isset($_POST['vari_id']) && $_POST['vari_id']!=''){
+    if(isset($_POST['vari_id']) && $_POST['vari_id']!=''){
         WC()->cart->add_to_cart( $_POST['prod_id'], $_POST['qty'], $_POST['vari_id'] );
-        wc_add_notice( __( 'Terima kasih. Barang berhasil dimasukkan ke dalam cart.', 'woocommerce' ));
+        $cur_lang = get_bloginfo( 'language' );
+        if(strpos($cur_lang,'id') !== false)
+            wc_add_notice( __( 'Terima kasih. Barang berhasil dimasukkan ke dalam cart.', 'woocommerce' ));
+        else
+            wc_add_notice( __( 'Thank You. Item has been successfully added to cart.', 'woocommerce' ));
       }
       else{
         WC()->cart->add_to_cart( $_POST['prod_id'], $_POST['qty']);
-        wc_add_notice( __( 'Terima kasih. Barang berhasil dimasukkan ke dalam cart.', 'woocommerce' ));
+        $cur_lang = get_bloginfo( 'language' );
+        if(strpos($cur_lang,'id') !== false)
+            wc_add_notice( __( 'Terima kasih. Barang berhasil dimasukkan ke dalam cart.', 'woocommerce' ));
+        else
+            wc_add_notice( __( 'Thank You. Item has been successfully added to cart.', 'woocommerce' ));
       }
     // }    
     echo 'sukses';
@@ -1338,8 +1343,6 @@ function make_empty_ali_cart() {
   }    
 }
 
-// add_action( 'init', 'script_enqueuer_ali');
-
 function script_enqueuer_ali() {
 
         wp_register_script( "empty-cart-ali", plugin_dir_url(__FILE__).'/js/atca.js', array('jquery') );
@@ -1348,18 +1351,15 @@ function script_enqueuer_ali() {
 
         wp_enqueue_script( 'jquery' );
         wp_enqueue_script( 'empty-cart-ali' );
-      // }
+      
 }
 
 add_action( 'woocommerce_product_options_inventory_product_data', 'wc_uom_product_fields');
 add_action( 'woocommerce_process_product_meta', 'wc_uom_save_field_input' );
 
 function wc_uom_product_fields() {
-    // Security..... make sure the form request comes from the right place people.
-    // wp_nonce_field( basename( __FILE__ ), 'wc_uom_product_fields_nonce' );
-
     echo '<div class="wc_uom_input">';
-      // Woo_UOM fields will be created here.
+      
       woocommerce_wp_text_input(
         array(
           'id'          => '_uom',
@@ -1400,49 +1400,24 @@ function wc_uom_product_fields() {
 
 add_action( 'woocommerce_checkout_create_order_line_item', 'hmma',10,4);
 function hmma( $item, $cart_item_key, $values, $order ) {
-    // Get a product custom field value
     $custom_field_value = get_post_meta( $item->get_product_id(), '_uom', true );
-    // Update order item meta
     if ( ! empty( $custom_field_value ) ){
         $item->update_meta_data( '_uom', $custom_field_value );
     }
-    // else{
-    //     $item->update_meta_data( '_uom', 'pcs' );
-    // }
 }
 
-function woa_custom_hours( $hours ) {
-  // More explication on WooCommerce status : https://docs.woocommerce.com/document/managing-orders/
-  
+function woa_custom_hours( $hours ) {  
   $jam_custom = 48;
-  // $status[] = 'wc-processing';
-  //$status[] = 'wc-completed';
-  //$status[] = 'wc-refunded';
-  //$status[] = 'wc-failed';
-
   return $jam_custom;
 }
 add_filter( 'woo_cao_default_hours', 'woa_custom_hours', 10, 1 );
 
 function woa_custom_statustocancel_hook( $status ) {
-  // More explication on WooCommerce status : https://docs.woocommerce.com/document/managing-orders/
   $status[] = 'wc-pending';
   $status[] = 'wc-on-hold';
-  // $status[] = 'wc-processing';
-  //$status[] = 'wc-completed';
-  //$status[] = 'wc-refunded';
-  //$status[] = 'wc-failed';
-
   return $status;
 }
 add_filter( 'woo_cao_statustocancel', 'woa_custom_statustocancel_hook', 10, 1 );
-
-// function wc_uom_save_field_input( $post_id ) {
-//    if ( isset( $_POST['_woo_uom_input'], $_POST['wc_uom_product_fields_nonce'] ) && wp_verify_nonce( sanitize_key( $_POST['wc_uom_product_fields_nonce'] ), basename( __FILE__ ) ) ) :
-//      $woo_uom_input = sanitize_text_field( wp_unslash( $_POST['_woo_uom_input'] ) );
-//      update_post_meta( $post_id, '_woo_uom_input', esc_attr( $woo_uom_input ) );
-//    endif;
-//  }
 
 function wc_uom_save_field_input($post_id){
   if ( isset( $_POST['_uom'])){
@@ -1490,7 +1465,6 @@ function namespace_ajax_search( $request ) {
       $ids = $wpdb->get_results("SELECT ID,guid FROM {$wpdb->posts} WHERE guid = '$param'");
       foreach ($ids as $valune) {
         $results[] = [
-          //'source_url' => $valune->guid,
           'id' => (int)$valune->ID,
         ];
       }
@@ -1509,12 +1483,10 @@ function cmk_additional_button_timer() {
     $productID = get_the_ID();
 	  if($productID){
 		$time_meta = get_post_meta($productID,'expired_date',true);
-		// $time_meta = 
 		if($time_meta){
-			// echo '<p id="saleend" style="color:red">'.$time_meta.'</p>';
-			echo "<br><br>";//.$time_meta;
+			echo "<br><br>";;
 			echo "Promo Group Buy :<br>";
-      $datass = str_replace("T", " ", $time_meta);
+            $datass = str_replace("T", " ", $time_meta);
 			echo "Valid until : $datass<br>";
 			echo '<p id="saleend" style="color:red;"></p>';
 			$coutry = get_post_meta($productID,'origin_country',true);
@@ -1524,10 +1496,7 @@ function cmk_additional_button_timer() {
 			$arr_info = get_post_meta($productID,'arrival_info',true);
 			if($arr_info){
 				echo "Estimate Arrival : $arr_info<br>";
-			}					
-			
-			// echo "<br>".$time_meta;
-
+			}
 			wp_register_script( 'timer-gbuy-ali', plugin_dir_url(__FILE__).'/js/gbtime.js', array('jquery') );
 
 			wp_localize_script( 'timer-gbuy-ali', 'myAjax', array( 
@@ -1538,9 +1507,6 @@ function cmk_additional_button_timer() {
 			wp_enqueue_script( 'jquery' );
 			wp_enqueue_script( 'timer-gbuy-ali' );
 
-            // wp_register_script( "empty-cart-ali", plugin_dir_url(__FILE__).'/js/atca.js', array('jquery') );
-
-			
 		}
 	}
 }
@@ -1555,7 +1521,6 @@ function woocommerce_cloudways_purchasable($cloudways_purchasable) {
 			$time_now = time();
 			return (($time_now > $timestamp1) ? false : $cloudways_purchasable);	
 		}
-		// $productnya = wc_get_product($productID);
 	}
 	return $cloudways_purchasable;
 }
@@ -1564,10 +1529,6 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
     function your_shipping_method_init2() {
         if ( ! class_exists( 'WC_Shipping_AsiaCom' ) ) {
             class WC_Shipping_AsiaCom extends WC_Shipping_Method {
-
-                /**
-                 * Constructor. The instance ID is passed to this.
-                 */
                 public function __construct( $instance_id = 0 ) {
                     $this->id                    = 'AsiaCom_Shipping';
                     $this->instance_id           = absint( $instance_id );
@@ -1616,15 +1577,12 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                         $tampung = $value['id'];
                         $array_option["$tampung"] = $value['attributes']['name'];
                     }
-                    
-                    // city
+            
                     $ch = curl_init("https://api2.asiacommerce.net/api/v2/cities?page[limit]=10000&filter[country_id][is]=$id_country");
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
                     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);            
                     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-                    // curl_setopt($ch, CURLOPT_GET, true);
-                    // curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
                     
                     // Set HTTP Header for POST request 
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
@@ -1648,45 +1606,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                     // Close cURL session handle
                     curl_close($ch);
                     
-                    // $this->instance_form_fields = array(
-                    //   'calculate_inter' => array(
-                    //     'title' 		=> __( 'Calculate International Rate' ),
-                    //     'type' 			=> 'checkbox',
-                    //     'label' 		=> __( 'Enable / Disable Calculate for International Shipping Product' ),
-                    //     'default' 		=> 'yes',
-                    //   ),
-                    //   'ali_province' => array(
-                    //     'title' => 'Province',
-                    //     'description' => 'Select your origin province',
-                    //     // 'type' => 'text|password|textarea|checkbox|select|multiselect',
-                    //     'type' => 'select',
-                    //     'default' => '',
-                    //     'class' => 'ali_provi',
-                    //     'css' => '',
-                    //     // 'label' => 'Label', // checkbox only
-                    //     'options' => $array_option,
-                    //     'custom_attributes' => array(
-                    //                             'required'=>'required'
-                    //     )
-                    //   ),
-                    //   'ali_city' => array(
-                    //     'title' => 'City',
-                    //     'description' => 'Select your origin city',
-                    //     // 'type' => 'text|password|textarea|checkbox|select|multiselect',
-                    //     'type' => 'select',
-                    //     'default' => '',
-                    //     'class' => 'ali_citi',
-                    //     'css' => '',
-                    //     // 'label' => 'Label', // checkbox only
-                    //     'options' => $array_option2
-                    //   )
-                    // );
-                    
                     $this->instance_form_fields = array(
                         'AsiaCom_Product' => array(
                             'title' 		=> __( 'For Asiacommerce Product : ' ),
                             'type' 			=> 'text',
-                            // 'label' 		=> __( '' )for checkbox only,
                             'css' => 'display:none;',
                             'description' => 'For some country routess, this plugin will calculate the Air Courier rates for AsiaCommerce products. ',
                             'default' 		=> 'For some country routes, this plugin will calculate the Air Courier rates for AsiaCommerce products. ',
@@ -1736,10 +1659,7 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                             'options' => $array_option2
                         )
                     );
-                    
-                    // $this->enabled            = $this->get_option( 'enabled' );
                     $this->title                = 'AsiaCom_Shipping';
-                    // $this->admin_set = $this->instance_form_fields;
                     $this->init_settings();
                     
                     add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -1757,8 +1677,7 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                 * @return void
                 */
                 public function calculate_shipping( $package = array() ) {
-                    
-                    // print("<pre>".print_r($package,true)."</pre>");
+    
                     $infoname = get_bloginfo( 'name' );
                     
                     foreach ($package['contents'] as $key_cont => $value_conte) {
@@ -1775,11 +1694,10 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                     $destination_country = $package['destination']['country'];
                     $destination_country = WC()->countries->countries["$destination_country"];
                     
-                    if($ali_prod && $ali_prod=="1"){            
-                        // echo "ali prod = 1";
+                    if($ali_prod && $ali_prod=="1"){
                         if($ori_country_prod){
                             if($ori_country_prod==$destination_country){
-                                $origin_city = $ori_city_prod; /*? $ori_city_prod : $this->instance_settings['ali_city'];*/
+                                $origin_city = $ori_city_prod;
                                 if($origin_city){
                                     $url_endpoint = urlencode($origin_city);
                                     $ch = curl_init("https://api2.asiacommerce.net/api/v2/cities?page[limit]=25&filter[name][like]=$url_endpoint");
@@ -1989,8 +1907,6 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                     $etd = $value_data['attributes']['remarks'];
                                     $label = $wh_name." : ".$courier_name." - ".$tipe_layanan." ( ".$etd." ) ";
                                     
-                                    // echo $hasilbagi1." ".$totalbayar."<br>";
-                                    
                                     $rate = array(
                                         'id'        => $this->get_rate_id( $courier_name . ':' . $tipe_layanan ),
                                         'label'     => $label,
@@ -2169,13 +2085,7 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                     }
                                 }
                                 else if($enable_CI!='yes'){
-                                    // $rate = array(
-                                    //     'id'        => $this->get_rate_id( 'ASIACOMMERCE' . ':' . 'air courier' ),
-                                    //     'label'     => 'Free Shipping',
-                                    //     'cost'      => 0,
-                                    //     'calc_tax'  => 'per_item'
-                                    // );
-                                    // $this->add_rate( $rate ); 
+                                    //
                                 }
                             }
                         }
@@ -2284,9 +2194,7 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                         $wh_name = "WH ".$wh_meta;
                                         $tipe_layanan = $value_data['attributes']['name'];
                                         $etd = $value_data['attributes']['remarks'];
-                                        $label = $wh_name." : ".$courier_name." - ".$tipe_layanan." ( ".$etd." ) ";
-                                    
-                                        // echo $hasilbagi1." ".$totalbayar."<br>";
+                                        $label = $wh_name." : ".$courier_name." - ".$tipe_layanan." ( ".$etd." ) ";                            
                                         
                                         $rate = array(
                                               'id'        => $this->get_rate_id( $courier_name . ':' . $tipe_layanan ),
@@ -2300,7 +2208,6 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                             }
                             else{
                                 $enable_CI = $this->instance_settings['calculate_inter'];
-                                // var_dump($enable_CI);
                                 $debug = 0;
                                 if($enable_CI=='yes'){
                                     if($debug==1){
@@ -2387,7 +2294,6 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                                 $harga_rate = array();
                                                 $currency_rate = array();
                                                 $remarks = array();
-                                                // $selisih_now = array();
                                                 $selisih_min = array();
                                                 $cour_id_now = '';
                                                 $serv_nm_now = '';
@@ -2414,9 +2320,9 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                                             $currency_rate[$cour_id_now][$serv_nm_now] = $data['attributes']['currency'];
                                                             $remarks[$cour_id_now][$serv_nm_now] = $data['attributes']['remarks'];
                                                         }
-                                                        // echo $number. "\t". $data['attributes']['rate_per_weight']. "\t". $selisih_now. "\t"."selisih minimum = $selisih_min"."\t"."rate now = $harga_rate"."\n";
+                                                        
                                                     }
-                                                    // echo $arr_res['included']['courier'][$courier_id]['attributes']['name']." ".$service_name." (".$remarks.") "." $harga_rate"."\n";
+                                                    
                                                 }
                                                 
                                                 $market_currency = get_woocommerce_currency();
@@ -2476,14 +2382,7 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
                                     }
                                 }
                                 else if($enable_CI!='yes'){
-                                    // $rate = array(
-                                    //     'id'        => $this->get_rate_id( 'ASIACOMMERCE' . ':' . 'air courier' ),
-                                    //     'label'     => 'Free Shipping',
-                                    //     'cost'      => 0,
-                                    //     'calc_tax'  => 'per_item'
-                                    // );
-                                
-                                    // $this->add_rate( $rate ); 
+                                    //
                                 }
                             }
                         }
@@ -2498,8 +2397,6 @@ if(is_plugin_active('woocommerce/woocommerce.php')){
     add_filter( 'woocommerce_shipping_methods', 'register_tyche_method' );
     
     function register_tyche_method( $methods ) {
-    
-        // $method contains available shipping methods
         $methods[ 'AsiaCom_Shipping' ] = 'WC_Shipping_AsiaCom';
     
         return $methods;
@@ -2527,62 +2424,37 @@ if (is_multisite()) {
     $activePlugins = apply_filters('active_plugins', get_option('active_plugins'));
 }
 
-/**
- * Check if WooCommerce is active.
- */
 if (in_array('woocommerce/woocommerce.php', $activePlugins)) {
 
     if (!class_exists('Academe_Multiple_Packages')) {
-        // Include the main class.
-        // We will keep classes each defined in their own files.
         include_once(dirname(__FILE__) . '/classes/Academe_Multiple_Packages.php');
     }
-
-    // Add the filter to generate the packages.
-    // At the moment, this plugin will discard any packages already created and then
-    // generate its own from scratch. A future enhancement would see this plugin
-    // taking the existing packages, and perhaps splitting them down further if
-    // necessary, then adding the linking meta fields to the result.
     add_filter(
         'woocommerce_cart_shipping_packages',
         array(Academe_Multiple_Packages::get_instance(), 'generate_packages')
     );
 
-    // This action allows plugins to add order item meta to shipping.
     add_action(
         'woocommerce_add_shipping_order_item',
         array(Academe_Multiple_Packages::get_instance(), 'link_shipping_line_item'),
         10, 3
     );
 
-    // Add shipping line meta fields to the shipping line in the order API.
     add_filter(
         'woocommerce_api_order_response',
         array(Academe_Multiple_Packages::get_instance(), 'api_show_shipping_line_meta'),
         10, 4
     );
 
-    /**
-     * The settings are needed only when in the admin area.
-     */
     if (is_admin()) {
-        /**
-         * Define the shipping method.
-         */
         function academe_wc_multiple_packages_init()
         {
             if (!class_exists('Academe_Multiple_Packages_Settings')) {
-                // Include the settings and create a new instance.
                 require_once(dirname(__FILE__) . '/classes/Academe_Multiple_Packages_Settings.php');
             }
         }
         add_action('woocommerce_shipping_init', 'academe_wc_multiple_packages_init');
 
-        /**
-         * Add the shipping method to the WC list of methods.
-         * It is not strictly a shipping method itself, but a tool for grouping other
-         * shipping methods.
-         */
         function academe_add_wc_multiple_packages($methods)
         {
             $methods[] = 'Academe_Multiple_Packages_Settings';
