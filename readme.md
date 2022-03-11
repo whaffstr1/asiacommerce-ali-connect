@@ -7,5 +7,8 @@ contain several of features. such as
 ~ Multiple Shipping Origin Supported
 ~ Ensure that the goods when add to cart is from the same country
 
-Update
+Update 2.2
 - Fix public api used for calculate shipping
+
+Update 2.3
+- add multilanguage for display text (Indo & Eng) based on site language

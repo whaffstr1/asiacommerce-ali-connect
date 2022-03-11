@@ -4,7 +4,7 @@
 
  * @package Ali_Connect
 
- * @version 2.2
+ * @version 2.3
 
  */
 
@@ -16,7 +16,7 @@ Plugin Name: AsiaCommerce - Ali Connect
 
 Description: AsiaCommerce Logistic Integration Plugin for WooCommerce.
 
-Version: 2.2
+Version: 2.3
 
 Author: AsiaCommerce Networks Limited
 
@@ -43,7 +43,7 @@ class Ali_Connect_Wordpress
 
     protected $fibu;
 
-    protected static $version = '2.2';
+    protected static $version = '2.3';
 
     public function __construct(){
 
