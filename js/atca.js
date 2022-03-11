@@ -1,13 +1,22 @@
 jQuery(function($){
-
+    var lang = myAjax.language;
     if( $('body.single').length && $('body.single-product').length ){
-        
-        $(".woocommerce-error").append('<a class="button kosongcart">Ya, Ganti Cart Saya<i class="fa fa-trash" aria-hidden="true"></i></a>');
+        if(lang.indexOf("id")>=0){
+            $(".woocommerce-error").append('<a class="button kosongcart">Ya, Ganti Cart Saya<i class="fa fa-trash" aria-hidden="true"></i></a>');
+        }
+        else{
+            $(".woocommerce-error").append('<a class="button kosongcart">Yes, Change My Cart<i class="fa fa-trash" aria-hidden="true"></i></a>');
+        }
     }
 
     $(".button.kosongcart").click(function(){
-
-        var r = confirm("Yakin Kosongkan cart dan menambahkan barang ini ke cart anda ?");
+        var r;
+        if(lang.indexOf("id")>=0){
+            r = confirm("Yakin Kosongkan cart dan menambahkan barang ini ke cart anda ?");
+        }
+        else{
+            r = confirm("Are you sure you want to empty your cart and add this item to your cart?");
+        }
         if (r == true) {
            
             $.ajax({
